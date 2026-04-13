@@ -15,3 +15,13 @@ UserSettings/
 *.booproj
 *.svd
 *.pdb
+MemoryCaptures/
+Recordings/
+
+*.apk
+*.aab
+
+*.unitypackage
+
+.DS_Store
+Thumbs.db
