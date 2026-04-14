@@ -10206,7 +10206,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   up: {fileID: 1296214332}
   down: {fileID: 316029601}
-  left: {fileID: 0}
+  left: {fileID: 924799757}
   right: {fileID: 0}
 --- !u!212 &1234629078
 SpriteRenderer:
@@ -11268,7 +11268,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1353799568
 Transform:
   m_ObjectHideFlags: 0

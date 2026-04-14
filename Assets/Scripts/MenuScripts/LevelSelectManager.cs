@@ -95,7 +95,6 @@ public class LevelSelectManager : MonoBehaviour
 
     public void OnRideClicked()
     {
-        Debug.Log("Ride clicked. Selected level = " + selectedLevelIndex);
         if (isBusy)
             return;
 
