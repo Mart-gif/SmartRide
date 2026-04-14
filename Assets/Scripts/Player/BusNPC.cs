@@ -7,16 +7,17 @@ public class BusNPC : MonoBehaviour
     private enum BusState
     {
         OnRoad,
-        HalfEnteringTunnel,
-        HalfExitingTunnel
+        HalfEntering,
+        HalfExiting
     }
 
     [Header("References")]
     [SerializeField] private PlayerPathController player;
     [SerializeField] private GameSceneController gameSceneController;
+    [SerializeField] private SpriteRenderer visualSpriteRenderer;
 
     [Header("Route")]
-    [SerializeField] private PathNode startHeadNode;
+    [SerializeField] private PathNode startNode;
     [SerializeField] private MoveDirection moveDirection = MoveDirection.Right;
     [SerializeField] private BusTunnelPortal portalA;
     [SerializeField] private BusTunnelPortal portalB;
@@ -25,34 +26,35 @@ public class BusNPC : MonoBehaviour
     [SerializeField] private float moveDuration = 0.15f;
     [SerializeField] private Vector2 worldOffset = Vector2.zero;
 
-    [Header("Visual")]
-    [SerializeField] private SpriteRenderer visualSpriteRenderer;
-
-    [Header("Normal Sprites")]
+    [Header("Sprites")]
     [SerializeField] private Sprite upSprite;
     [SerializeField] private Sprite downSprite;
     [SerializeField] private Sprite leftSprite;
     [SerializeField] private Sprite rightSprite;
-
-    [Header("Tunnel Sprites")]
     [SerializeField] private Sprite halfEnterSprite;
     [SerializeField] private Sprite halfExitSprite;
 
-    private PathNode headNode;
+    private PathNode currentNode;
     private BusState state = BusState.OnRoad;
-    private BusTunnelPortal targetPortal;
+    private BusTunnelPortal enterPortal;
     private BusTunnelPortal exitPortal;
     private bool isMoving;
 
+    private void Awake()
+    {
+        if (visualSpriteRenderer == null)
+            visualSpriteRenderer = GetComponentInChildren<SpriteRenderer>();
+    }
+
     private void Start()
     {
-        headNode = startHeadNode;
-        SnapToNode();
+        currentNode = startNode;
+        SnapToCurrentNode();
     }
 
     public void StepBus()
     {
-        if (isMoving || headNode == null)
+        if (isMoving || currentNode == null)
             return;
 
         switch (state)
@@ -61,11 +63,11 @@ public class BusNPC : MonoBehaviour
                 StepOnRoad();
                 break;
 
-            case BusState.HalfEnteringTunnel:
+            case BusState.HalfEntering:
                 StepHalfEntering();
                 break;
 
-            case BusState.HalfExitingTunnel:
+            case BusState.HalfExiting:
                 StepHalfExiting();
                 break;
         }
@@ -73,7 +75,7 @@ public class BusNPC : MonoBehaviour
 
     private void StepOnRoad()
     {
-        PathNode nextNode = headNode.GetNeighbor(moveDirection);
+        PathNode nextNode = currentNode.GetNeighbor(moveDirection);
         if (nextNode == null)
             return;
 
@@ -81,36 +83,33 @@ public class BusNPC : MonoBehaviour
 
         if (portal != null)
         {
-            targetPortal = portal;
-            state = BusState.HalfEnteringTunnel;
+            enterPortal = portal;
+            state = BusState.HalfEntering;
 
-            // автобус реально доезжает до входного туннеля
-            targetPortal.ShowOccupied();
-            StartCoroutine(MoveRoutine(nextNode, halfEnterSprite, true));
+            enterPortal.ShowOccupied();
+            StartCoroutine(MoveRoutine(nextNode, halfEnterSprite));
             return;
         }
 
-        StartCoroutine(MoveRoutine(nextNode, GetNormalSprite(moveDirection), true));
+        StartCoroutine(MoveRoutine(nextNode, GetNormalSprite(moveDirection)));
     }
 
     private void StepHalfEntering()
     {
-        if (targetPortal == null)
+        if (enterPortal == null)
             return;
 
-        exitPortal = GetOtherPortal(targetPortal);
+        exitPortal = GetOtherPortal(enterPortal);
         if (exitPortal == null || exitPortal.PortalNode == null)
             return;
 
-        // входной туннель возвращаем в обычный вид
-        targetPortal.ShowNormal();
+        enterPortal.ShowNormal();
 
-        // теперь автобус появляется у второго туннеля наполовину
-        state = BusState.HalfExitingTunnel;
         moveDirection = exitPortal.ExitDirection;
-        exitPortal.ShowOccupied();
+        state = BusState.HalfExiting;
 
-        StartCoroutine(MoveRoutine(exitPortal.PortalNode, halfExitSprite, false));
+        exitPortal.ShowOccupied();
+        StartCoroutine(MoveRoutine(exitPortal.PortalNode, halfExitSprite));
     }
 
     private void StepHalfExiting()
@@ -125,10 +124,10 @@ public class BusNPC : MonoBehaviour
         exitPortal.ShowNormal();
         state = BusState.OnRoad;
 
-        StartCoroutine(MoveRoutine(nextNode, GetNormalSprite(moveDirection), true));
+        StartCoroutine(MoveRoutine(nextNode, GetNormalSprite(moveDirection)));
     }
 
-    private IEnumerator MoveRoutine(PathNode targetNode, Sprite sprite, bool updateHeadNodeAtEnd)
+    private IEnumerator MoveRoutine(PathNode targetNode, Sprite targetSprite)
     {
         isMoving = true;
 
@@ -136,8 +135,8 @@ public class BusNPC : MonoBehaviour
         Vector3 targetPos = targetNode.transform.position + (Vector3)worldOffset;
         float elapsed = 0f;
 
-        if (sprite != null && visualSpriteRenderer != null)
-            visualSpriteRenderer.sprite = sprite;
+        if (visualSpriteRenderer != null && targetSprite != null)
+            visualSpriteRenderer.sprite = targetSprite;
 
         while (elapsed < moveDuration)
         {
@@ -148,42 +147,29 @@ public class BusNPC : MonoBehaviour
         }
 
         transform.position = targetPos;
-
-        if (updateHeadNodeAtEnd)
-            headNode = targetNode;
-        else
-            headNode = targetNode;
-
+        currentNode = targetNode;
         isMoving = false;
 
-        CheckCrash();
+        CheckCrashWithPlayer();
     }
 
-    private void CheckCrash()
+    private void CheckCrashWithPlayer()
     {
-        if (player == null || player.CurrentNode == null || gameSceneController == null)
+        if (player == null || gameSceneController == null || player.CurrentNode == null)
             return;
 
-        if (player.CurrentNode == headNode || player.CurrentNode == GetTailNode())
+        if (player.CurrentNode == currentNode)
         {
             gameSceneController.TriggerCrash(player.transform.position, moveDirection);
         }
     }
 
-    private PathNode GetTailNode()
+    private void SnapToCurrentNode()
     {
-        if (headNode == null)
-            return null;
-
-        return headNode.GetNeighbor(GetOppositeDirection(moveDirection));
-    }
-
-    private void SnapToNode()
-    {
-        if (headNode == null)
+        if (currentNode == null)
             return;
 
-        transform.position = headNode.transform.position + (Vector3)worldOffset;
+        transform.position = currentNode.transform.position + (Vector3)worldOffset;
 
         if (visualSpriteRenderer != null)
             visualSpriteRenderer.sprite = GetNormalSprite(moveDirection);
@@ -205,18 +191,6 @@ public class BusNPC : MonoBehaviour
         if (portal == portalA) return portalB;
         if (portal == portalB) return portalA;
         return null;
-    }
-
-    private MoveDirection GetOppositeDirection(MoveDirection direction)
-    {
-        switch (direction)
-        {
-            case MoveDirection.Up: return MoveDirection.Down;
-            case MoveDirection.Down: return MoveDirection.Up;
-            case MoveDirection.Left: return MoveDirection.Right;
-            case MoveDirection.Right: return MoveDirection.Left;
-            default: return direction;
-        }
     }
 
     private Sprite GetNormalSprite(MoveDirection direction)
