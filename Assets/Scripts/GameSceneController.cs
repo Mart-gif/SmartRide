@@ -9,6 +9,7 @@ public class GameSceneController : MonoBehaviour
     [Header("Player")]
     [SerializeField] private PlayerPathController player;
     private BusNPC[] currentLevelBuses;
+    private PoliceNPC[] currentLevelPolice;
 
     [Header("Level Settings")]
     [SerializeField] private LevelConfigDatabase levelConfigDatabase;
@@ -64,6 +65,7 @@ public class GameSceneController : MonoBehaviour
         CacheCurrentLevelBuses();
         CacheCurrentLevelTaxis();
         CacheCurrentLevelTrafficLights();
+        CacheCurrentLevelPolice();
 
         if (currentLevelConfig == null)
         {
@@ -251,6 +253,7 @@ public class GameSceneController : MonoBehaviour
 
         MoveTaxis();
         MoveBuses();
+        MovePolice();
         AdvanceTrafficLights();
 
         if (currentFuel <= 0)
@@ -470,6 +473,18 @@ public class GameSceneController : MonoBehaviour
         SceneManager.LoadScene("Menu");
     }
 
+    private void CacheCurrentLevelPolice()
+    {
+        LevelContainer currentContainer = GetCurrentLevelContainer();
+
+        if (currentContainer == null)
+        {
+            currentLevelPolice = new PoliceNPC[0];
+            return;
+        }
+
+        currentLevelPolice = currentContainer.GetComponentsInChildren<PoliceNPC>(true);
+    }
     private void CacheCurrentLevelBuses()
     {
         LevelContainer currentContainer = GetCurrentLevelContainer();
@@ -492,6 +507,18 @@ public class GameSceneController : MonoBehaviour
         {
             if (currentLevelBuses[i] != null && currentLevelBuses[i].gameObject.activeInHierarchy)
                 currentLevelBuses[i].StepBus();
+        }
+    }
+
+    private void MovePolice()
+    {
+        if (currentLevelPolice == null)
+            return;
+
+        for (int i = 0; i < currentLevelPolice.Length; i++)
+        {
+            if (currentLevelPolice[i] != null && currentLevelPolice[i].gameObject.activeInHierarchy)
+                currentLevelPolice[i].StepPolice();
         }
     }
 }
