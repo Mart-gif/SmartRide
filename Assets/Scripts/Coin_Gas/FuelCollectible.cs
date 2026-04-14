@@ -23,6 +23,7 @@ public class FuelCollectible : MonoBehaviour
         if (controller != null)
         {
             controller.AddFuel(fuelAmount);
+            controller.PlayFuelCollectSfx();
         }
 
         if (collectEffect != null)

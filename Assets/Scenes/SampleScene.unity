@@ -19125,11 +19125,14 @@ MonoBehaviour:
   losePanel: {fileID: 323474513}
   topPanel: {fileID: 1039966212}
   bottomPanel: {fileID: 1402998243}
+  pauseButton: {fileID: 0}
   winNextButton: {fileID: 1448897633}
   winRestartButton: {fileID: 58924167}
   winMenuButton: {fileID: 642156189}
   loseRestartButton: {fileID: 1145318029}
   loseMenuButton: {fileID: 660855338}
+  pauseRestartButton: {fileID: 0}
+  pauseMenuButton: {fileID: 0}
   winAnimator: {fileID: 1822287262}
   loseAnimator: {fileID: 323474517}
   winPanelUI: {fileID: 1822287263}
@@ -19137,8 +19140,11 @@ MonoBehaviour:
   explosionPrefab: {fileID: 3858502285065223198, guid: 2a2ca04b23aff8e428084ef2c07be70c, type: 3}
   verticalExplosionPrefab: {fileID: 1348528268850115943, guid: ce6e8cba5913bfc45a09e96e3c39e1a1, type: 3}
   audioSource: {fileID: 1549710271}
-  crashSfx: {fileID: 8300000, guid: 4c50fc56815c69942b140564dd79a464, type: 3}
+  crashSfx: {fileID: 8300000, guid: edffb213947cb5847b18ce97b2412a9c, type: 3}
   loseDelayAfterCrash: 0.2
+  starCollectSfx: {fileID: 0}
+  fuelCollectSfx: {fileID: 8300000, guid: 9507ca3751c1b684baa04e7e36f3e423, type: 3}
+  levelCompleteSfx: {fileID: 8300000, guid: 9c4069d010934324096ad43f447cdeae, type: 3}
 --- !u!82 &1549710271
 AudioSource:
   m_ObjectHideFlags: 0
@@ -19151,7 +19157,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 1
-  m_Volume: 1
+  m_Volume: 0.5
   m_Pitch: 1
   Loop: 0
   Mute: 0

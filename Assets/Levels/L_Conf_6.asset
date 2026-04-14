@@ -15,5 +15,5 @@ MonoBehaviour:
   levelIndex: 6
   startGridPosition: {x: -2, y: -3}
   startDirection: 3
-  movesForTwoStars: 45
-  maxFuel: 45
+  movesForTwoStars: 30
+  maxFuel: 30
