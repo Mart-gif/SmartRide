@@ -20,12 +20,15 @@ public class GameSceneController : MonoBehaviour
     [SerializeField] private GameObject losePanel;
     [SerializeField] private GameObject topPanel;
     [SerializeField] private GameObject bottomPanel;
+    [SerializeField] private GameObject pauseButton;
 
     [SerializeField] private Button winNextButton;
     [SerializeField] private Button winRestartButton;
     [SerializeField] private Button winMenuButton;
     [SerializeField] private Button loseRestartButton;
     [SerializeField] private Button loseMenuButton;
+    [SerializeField] private Button pauseRestartButton;
+    [SerializeField] private Button pauseMenuButton;
 
     [SerializeField] private Animator winAnimator;
     [SerializeField] private Animator loseAnimator;
@@ -133,6 +136,18 @@ public class GameSceneController : MonoBehaviour
         {
             loseMenuButton.onClick.RemoveAllListeners();
             loseMenuButton.onClick.AddListener(OnMenuClicked);
+        }
+
+        if (pauseRestartButton != null)
+        {
+            pauseRestartButton.onClick.RemoveAllListeners();
+            pauseRestartButton.onClick.AddListener(OnRestartClicked);
+        }
+
+        if (pauseMenuButton != null)
+        {
+            pauseMenuButton.onClick.RemoveAllListeners();
+            pauseMenuButton.onClick.AddListener(OnMenuClicked);
         }
     }
 
@@ -364,6 +379,8 @@ public class GameSceneController : MonoBehaviour
 
         if (winAnimator != null)
             winAnimator.SetTrigger("Show");
+        if (pauseButton != null)
+            pauseButton.SetActive(false);
     }
 
     private int CalculateStars()
@@ -422,6 +439,9 @@ public class GameSceneController : MonoBehaviour
 
         if (loseAnimator != null)
             loseAnimator.SetTrigger("Show");
+
+        if (pauseButton != null)
+            pauseButton.SetActive(false);
     }
 
     private void OnNextClicked()
