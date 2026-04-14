@@ -73,7 +73,7 @@ public class LevelNodeUI : MonoBehaviour
             else
                 levelImage.sprite = unlockedSprite;
         }
-        int starCount = LevelProgressManager.GetStars(levelIndex);
+        int starCount = Mathf.Clamp(LevelProgressManager.GetStars(levelIndex), 0, stars.Length);
 
         if (stars != null && stars.Length > 0)
         {
