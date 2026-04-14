@@ -4794,7 +4794,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f68cbc69efe33434daedc94893a340b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  portalNode: {fileID: 2007113869}
+  portalNode: {fileID: 983885426}
   exitDirection: 0
 --- !u!212 &465459838
 SpriteRenderer:
@@ -13023,7 +13023,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1071988641
 Transform:
   m_ObjectHideFlags: 0
