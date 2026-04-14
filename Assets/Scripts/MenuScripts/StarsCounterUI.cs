@@ -30,4 +30,4 @@ public class StarsCounterUI : MonoBehaviour
                 break;
         }
     }
-}
+}   
