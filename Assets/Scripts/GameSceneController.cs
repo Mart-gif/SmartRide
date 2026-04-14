@@ -42,6 +42,11 @@ public class GameSceneController : MonoBehaviour
     [SerializeField] private AudioClip crashSfx;
     [SerializeField] private float loseDelayAfterCrash = 0.5f;
 
+    [Header("SFX")]
+    [SerializeField] private AudioClip starCollectSfx;
+    [SerializeField] private AudioClip fuelCollectSfx;
+    [SerializeField] private AudioClip levelCompleteSfx;
+
     private int currentLevelIndex = 1;
     private int movesUsed = 0;
     private int currentFuel = 0;
@@ -359,6 +364,7 @@ public class GameSceneController : MonoBehaviour
             return;
 
         levelFinished = true;
+        PlayLevelCompleteSfx();
 
         CommitCollectedCoins();
 
@@ -520,5 +526,23 @@ public class GameSceneController : MonoBehaviour
             if (currentLevelPolice[i] != null && currentLevelPolice[i].gameObject.activeInHierarchy)
                 currentLevelPolice[i].StepPolice();
         }
+    }
+
+    public void PlayStarCollectSfx()
+    {
+        if (audioSource != null && starCollectSfx != null)
+            audioSource.PlayOneShot(starCollectSfx);
+    }
+
+    public void PlayFuelCollectSfx()
+    {
+        if (audioSource != null && fuelCollectSfx != null)
+            audioSource.PlayOneShot(fuelCollectSfx);
+    }
+
+    public void PlayLevelCompleteSfx()
+    {
+        if (audioSource != null && levelCompleteSfx != null)
+            audioSource.PlayOneShot(levelCompleteSfx);
     }
 }

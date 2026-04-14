@@ -668,7 +668,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 7ccf2b0e3ab71594fbc2f085520edefe, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 1
+  m_Volume: 0.4
   m_Pitch: 1
   Loop: 1
   Mute: 0
@@ -1376,17 +1376,6 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 8090428289459002325, guid: 73dd95b56c49cb14d8be09d7211e00dc, type: 3}
   m_PrefabInstance: {fileID: 1000019568}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &839673341 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 6642807025332762253, guid: 73dd95b56c49cb14d8be09d7211e00dc, type: 3}
-  m_PrefabInstance: {fileID: 1000019568}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b494bbd48c7c1e342b87b4f2b64b7f4b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &871562485
 GameObject:
   m_ObjectHideFlags: 0
@@ -1546,7 +1535,6 @@ MonoBehaviour:
   - {fileID: 81305783}
   - {fileID: 1516738108}
   - {fileID: 1495073908}
-  - {fileID: 839673341}
   mapContent: {fileID: 1282990361}
   popupUI: {fileID: 0}
   rideButton: {fileID: 1302526473}
