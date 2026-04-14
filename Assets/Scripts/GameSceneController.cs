@@ -25,6 +25,8 @@ public class GameSceneController : MonoBehaviour
     [SerializeField] private Button winMenuButton;
     [SerializeField] private Button loseRestartButton;
     [SerializeField] private Button loseMenuButton;
+    [SerializeField] private Button pauseRestartButton;
+    [SerializeField] private Button pauseMenuButton;
 
     [SerializeField] private Animator winAnimator;
     [SerializeField] private Animator loseAnimator;
@@ -131,6 +133,18 @@ public class GameSceneController : MonoBehaviour
         {
             loseMenuButton.onClick.RemoveAllListeners();
             loseMenuButton.onClick.AddListener(OnMenuClicked);
+        }
+
+        if (pauseRestartButton != null)
+        {
+            pauseRestartButton.onClick.RemoveAllListeners();
+            pauseRestartButton.onClick.AddListener(OnRestartClicked);
+        }
+
+        if (pauseMenuButton != null)
+        {
+            pauseMenuButton.onClick.RemoveAllListeners();
+            pauseMenuButton.onClick.AddListener(OnMenuClicked);
         }
     }
 
