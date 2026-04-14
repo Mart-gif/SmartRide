@@ -129,4 +129,26 @@ public class TaxiNPC : MonoBehaviour
         if (targetSprite != null)
             visualSpriteRenderer.sprite = targetSprite;
     }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (player == null || gameSceneController == null)
+            return;
+
+        if (!other.CompareTag("Player"))
+            return;
+
+        gameSceneController.TriggerCrash(player.transform.position, moveDirection);
+    }
+
+    private void OnTriggerStay2D(Collider2D other)
+    {
+        if (player == null || gameSceneController == null)
+            return;
+
+        if (!other.CompareTag("Player"))
+            return;
+
+        gameSceneController.TriggerCrash(player.transform.position, moveDirection);
+    }
 }
