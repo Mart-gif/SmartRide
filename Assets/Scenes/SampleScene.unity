@@ -1900,7 +1900,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 1
-  m_Sprite: {fileID: 21300000, guid: ac52898859f0b36488a8b4ddbf4ff6c1, type: 3}
+  m_Sprite: {fileID: 21300000, guid: a53c742f7a50c824cbbaa5ccbbe900e3, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -7271,7 +7271,7 @@ MonoBehaviour:
   player: {fileID: 1849589048}
   gameSceneController: {fileID: 1549710270}
   spriteRenderer: {fileID: 0}
-  startNode: {fileID: 49100937}
+  startNode: {fileID: 2044780031}
   moveDirection: 0
   portalA: {fileID: 526897788}
   portalB: {fileID: 465459837}
@@ -10708,7 +10708,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1644968901768928589, guid: 07604084d3bd497448f14b7743d0c42e, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -16.2
+      value: -16
       objectReference: {fileID: 0}
     - target: {fileID: 1644968901768928589, guid: 07604084d3bd497448f14b7743d0c42e, type: 3}
       propertyPath: m_LocalPosition.z
@@ -13045,6 +13045,7 @@ Transform:
   - {fileID: 465459839}
   - {fileID: 526897790}
   - {fileID: 632547890}
+  - {fileID: 1136623221}
   m_Father: {fileID: 1418574827}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1071988642
@@ -13600,6 +13601,113 @@ Transform:
   m_Children: []
   m_Father: {fileID: 2141295054}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1136623220
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1136623221}
+  - component: {fileID: 1136623223}
+  - component: {fileID: 1136623222}
+  m_Layer: 0
+  m_Name: Police
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1136623221
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1136623220}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.56, y: -20.41, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1071988641}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1136623222
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1136623220}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e18c3ce189e8adb49a0e4c179d681dbe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 1849589048}
+  gameSceneController: {fileID: 1549710270}
+  spriteRenderer: {fileID: 0}
+  startNode: {fileID: 1224575747}
+  startDirection: 2
+  upSprite: {fileID: 21300000, guid: bb08d9ce59cd4314a9dc9d5a00630d63, type: 3}
+  downSprite: {fileID: 21300000, guid: b43915c32fd51fa43913e7f849811a9e, type: 3}
+  leftSprite: {fileID: 21300000, guid: 2c2a71612f0e5ae43aa84a4a79ee3c92, type: 3}
+  rightSprite: {fileID: 21300000, guid: b11780993a9415640a77a658cec2a44e, type: 3}
+  moveDuration: 0.1
+--- !u!212 &1136623223
+SpriteRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1136623220}
+  m_Enabled: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 0
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_Sprite: {fileID: 21300000, guid: 32cf9c7db51afa342819c535d07db868, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_FlipX: 0
+  m_FlipY: 0
+  m_DrawMode: 0
+  m_Size: {x: 1, y: 0.8}
+  m_AdaptiveModeThreshold: 0.5
+  m_SpriteTileMode: 0
+  m_WasSpriteAssigned: 1
+  m_MaskInteraction: 0
+  m_SpriteSortPoint: 0
 --- !u!1 &1137914971
 GameObject:
   m_ObjectHideFlags: 0
@@ -22823,10 +22931,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveDuration: 0.1
   visualSpriteRenderer: {fileID: 0}
-  upSprite: {fileID: 21300000, guid: 54fc520c43c31f34ba99b38e3bc8b5f7, type: 3}
-  downSprite: {fileID: 21300000, guid: a2d9cfdd9adedb64faa678d3f42a3a93, type: 3}
-  leftSprite: {fileID: 21300000, guid: e6d1c6ce70993be40be0cd27e7e692b0, type: 3}
-  rightSprite: {fileID: 21300000, guid: ac52898859f0b36488a8b4ddbf4ff6c1, type: 3}
+  upSprite: {fileID: 21300000, guid: c1f8a28d8bba14f40b96a117b57c4175, type: 3}
+  downSprite: {fileID: 21300000, guid: 4902e643af3ad6a479d994e6fa788938, type: 3}
+  leftSprite: {fileID: 21300000, guid: 65ad36f13ff73c84cbc0b8bc34961ee1, type: 3}
+  rightSprite: {fileID: 21300000, guid: a53c742f7a50c824cbbaa5ccbbe900e3, type: 3}
   worldOffset: {x: 0, y: 0}
 --- !u!1 &1863356496
 GameObject:
