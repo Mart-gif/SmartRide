@@ -14,6 +14,8 @@ public class LevelSelectManager : MonoBehaviour
     [SerializeField] private LevelInfoPopupUI popupUI;
     [SerializeField] private Button rideButton;
     [SerializeField] private ScrollRect scrollRect;
+
+    [SerializeField] private StarsCounterUI starsCounterUI;
     [Header("Car Sprites")]
     [SerializeField] private Image carImage;
     [SerializeField] private Sprite carRight;
@@ -32,7 +34,7 @@ public class LevelSelectManager : MonoBehaviour
         //PlayerPrefs.DeleteAll();
         //для удаления данных прогресса игрока
         InitializeNodes();
-
+        UpdateTotalStars();
         if (popupUI != null)
             popupUI.Initialize(this);
 
@@ -149,6 +151,7 @@ public class LevelSelectManager : MonoBehaviour
 
             scrollRect.normalizedPosition = new Vector2(normalizedX, normalizedY);
         }
+        carImage.SetNativeSize();
     }
 
     private LevelNodeUI GetNodeByLevel(int levelIndex)
@@ -160,7 +163,7 @@ public class LevelSelectManager : MonoBehaviour
         }
 
         return null;
-    }
+    }   
     private void SetCarDirection(Vector2 targetPos)
     {
         Vector2 currentPos = carRectTransform.anchoredPosition;
@@ -180,5 +183,12 @@ public class LevelSelectManager : MonoBehaviour
             else
                 carImage.sprite = carDown;
         }
+    }
+    private void UpdateTotalStars()
+    {
+        int total = LevelProgressManager.GetTotalStars(levelNodes.Length);
+
+        if (starsCounterUI != null)
+            starsCounterUI.SetNumber(total);
     }
 }

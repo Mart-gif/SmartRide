@@ -6,7 +6,6 @@ public class SettingsMenuController : MonoBehaviour
 
     public void OpenSettings()
     {
-        Debug.Log("OPEN SETTINGS");
         settingsMenu.SetActive(true);
     }
 

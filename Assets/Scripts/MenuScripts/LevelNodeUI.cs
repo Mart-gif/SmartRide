@@ -12,6 +12,10 @@ public class LevelNodeUI : MonoBehaviour
     [SerializeField] private Image levelImage;
     [SerializeField] private GameObject levelNumber;
 
+    [SerializeField] private Image[] stars;
+    [SerializeField] private Sprite starOn;
+    [SerializeField] private Sprite starOff;
+
     [SerializeField] private Sprite lockedSprite;
     [SerializeField] private Sprite unlockedSprite;
     [SerializeField] private Sprite passedSprite;
@@ -68,6 +72,18 @@ public class LevelNodeUI : MonoBehaviour
                 levelImage.sprite = passedSprite;
             else
                 levelImage.sprite = unlockedSprite;
+        }
+        int starCount = LevelProgressManager.GetStars(levelIndex);
+
+        if (stars != null && stars.Length > 0)
+        {
+            for (int i = 0; i < stars.Length; i++)
+            {
+                if (stars[i] == null)
+                    continue;
+
+                stars[i].sprite = (i < starCount) ? starOn : starOff;
+            }
         }
     }
 

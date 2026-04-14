@@ -60,4 +60,15 @@ public static class LevelProgressManager
         PlayerPrefs.DeleteKey(UnlockedLevelKey);
         PlayerPrefs.Save();
     }
+    public static int GetTotalStars(int maxLevels)
+    {
+        int total = 0;
+
+        for (int i = 1; i <= maxLevels; i++)
+        {
+            total += GetStars(i);
+        }
+
+        return total;
+    }
 }
