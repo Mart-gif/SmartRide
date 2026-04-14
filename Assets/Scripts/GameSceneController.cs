@@ -8,6 +8,7 @@ public class GameSceneController : MonoBehaviour
 {
     [Header("Player")]
     [SerializeField] private PlayerPathController player;
+    private BusNPC[] currentLevelBuses;
 
     [Header("Level Settings")]
     [SerializeField] private LevelConfigDatabase levelConfigDatabase;
@@ -57,6 +58,7 @@ public class GameSceneController : MonoBehaviour
             currentLevelConfig = levelConfigDatabase.GetLevelConfig(currentLevelIndex);
 
         ActivateCurrentLevelContainer();
+        CacheCurrentLevelBuses();
         CacheCurrentLevelTaxis();
         CacheCurrentLevelTrafficLights();
 
@@ -233,6 +235,7 @@ public class GameSceneController : MonoBehaviour
         UpdateFuelUI();
 
         MoveTaxis();
+        MoveBuses();
         AdvanceTrafficLights();
 
         if (currentFuel <= 0)
@@ -445,5 +448,30 @@ public class GameSceneController : MonoBehaviour
     private void OnMenuClicked()
     {
         SceneManager.LoadScene("Menu");
+    }
+
+    private void CacheCurrentLevelBuses()
+    {
+        LevelContainer currentContainer = GetCurrentLevelContainer();
+
+        if (currentContainer == null)
+        {
+            currentLevelBuses = new BusNPC[0];
+            return;
+        }
+
+        currentLevelBuses = currentContainer.GetComponentsInChildren<BusNPC>(true);
+    }
+
+    private void MoveBuses()
+    {
+        if (currentLevelBuses == null)
+            return;
+
+        for (int i = 0; i < currentLevelBuses.Length; i++)
+        {
+            if (currentLevelBuses[i] != null && currentLevelBuses[i].gameObject.activeInHierarchy)
+                currentLevelBuses[i].StepBus();
+        }
     }
 }

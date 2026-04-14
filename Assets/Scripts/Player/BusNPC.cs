@@ -7,24 +7,21 @@ public class BusNPC : MonoBehaviour
     private enum BusState
     {
         OnRoad,
-        HalfEntering,
-        HalfExiting
+        HalfEnter,
+        HalfExit
     }
 
-    [Header("References")]
+    [Header("Refs")]
     [SerializeField] private PlayerPathController player;
     [SerializeField] private GameSceneController gameSceneController;
-    [SerializeField] private SpriteRenderer visualSpriteRenderer;
+    [SerializeField] private SpriteRenderer spriteRenderer;
 
-    [Header("Route")]
+    [Header("Path")]
     [SerializeField] private PathNode startNode;
+    private PathNode currentNode;
     [SerializeField] private MoveDirection moveDirection = MoveDirection.Right;
     [SerializeField] private BusTunnelPortal portalA;
     [SerializeField] private BusTunnelPortal portalB;
-
-    [Header("Movement")]
-    [SerializeField] private float moveDuration = 0.15f;
-    [SerializeField] private Vector2 worldOffset = Vector2.zero;
 
     [Header("Sprites")]
     [SerializeField] private Sprite upSprite;
@@ -34,17 +31,13 @@ public class BusNPC : MonoBehaviour
     [SerializeField] private Sprite halfEnterSprite;
     [SerializeField] private Sprite halfExitSprite;
 
-    private PathNode currentNode;
+    [Header("Move")]
+    [SerializeField] private float moveDuration = 0.15f;
+
     private BusState state = BusState.OnRoad;
     private BusTunnelPortal enterPortal;
     private BusTunnelPortal exitPortal;
     private bool isMoving;
-
-    private void Awake()
-    {
-        if (visualSpriteRenderer == null)
-            visualSpriteRenderer = GetComponentInChildren<SpriteRenderer>();
-    }
 
     private void Start()
     {
@@ -63,12 +56,12 @@ public class BusNPC : MonoBehaviour
                 StepOnRoad();
                 break;
 
-            case BusState.HalfEntering:
-                StepHalfEntering();
+            case BusState.HalfEnter:
+                StepTeleportToExit();
                 break;
 
-            case BusState.HalfExiting:
-                StepHalfExiting();
+            case BusState.HalfExit:
+                StepExitFromTunnel();
                 break;
         }
     }
@@ -84,9 +77,7 @@ public class BusNPC : MonoBehaviour
         if (portal != null)
         {
             enterPortal = portal;
-            state = BusState.HalfEntering;
-
-            enterPortal.ShowOccupied();
+            state = BusState.HalfEnter;
             StartCoroutine(MoveRoutine(nextNode, halfEnterSprite));
             return;
         }
@@ -94,36 +85,32 @@ public class BusNPC : MonoBehaviour
         StartCoroutine(MoveRoutine(nextNode, GetNormalSprite(moveDirection)));
     }
 
-    private void StepHalfEntering()
+    private void StepTeleportToExit()
     {
-        if (enterPortal == null)
-            return;
-
         exitPortal = GetOtherPortal(enterPortal);
         if (exitPortal == null || exitPortal.PortalNode == null)
             return;
 
-        enterPortal.ShowNormal();
+        currentNode = exitPortal.PortalNode;
+        transform.position = currentNode.transform.position;
 
         moveDirection = exitPortal.ExitDirection;
-        state = BusState.HalfExiting;
 
-        exitPortal.ShowOccupied();
-        StartCoroutine(MoveRoutine(exitPortal.PortalNode, halfExitSprite));
+        if (spriteRenderer != null && halfExitSprite != null)
+            spriteRenderer.sprite = halfExitSprite;
+
+        state = BusState.HalfExit;
+
+        CheckCrash();
     }
 
-    private void StepHalfExiting()
+    private void StepExitFromTunnel()
     {
-        if (exitPortal == null || exitPortal.PortalNode == null)
-            return;
-
-        PathNode nextNode = exitPortal.PortalNode.GetNeighbor(moveDirection);
+        PathNode nextNode = currentNode.GetNeighbor(moveDirection);
         if (nextNode == null)
             return;
 
-        exitPortal.ShowNormal();
         state = BusState.OnRoad;
-
         StartCoroutine(MoveRoutine(nextNode, GetNormalSprite(moveDirection)));
     }
 
@@ -132,36 +119,34 @@ public class BusNPC : MonoBehaviour
         isMoving = true;
 
         Vector3 startPos = transform.position;
-        Vector3 targetPos = targetNode.transform.position + (Vector3)worldOffset;
+        Vector3 endPos = targetNode.transform.position;
         float elapsed = 0f;
 
-        if (visualSpriteRenderer != null && targetSprite != null)
-            visualSpriteRenderer.sprite = targetSprite;
+        if (spriteRenderer != null && targetSprite != null)
+            spriteRenderer.sprite = targetSprite;
 
         while (elapsed < moveDuration)
         {
             elapsed += Time.deltaTime;
             float t = Mathf.Clamp01(elapsed / moveDuration);
-            transform.position = Vector3.Lerp(startPos, targetPos, t);
+            transform.position = Vector3.Lerp(startPos, endPos, t);
             yield return null;
         }
 
-        transform.position = targetPos;
+        transform.position = endPos;
         currentNode = targetNode;
         isMoving = false;
 
-        CheckCrashWithPlayer();
+        CheckCrash();
     }
 
-    private void CheckCrashWithPlayer()
+    private void CheckCrash()
     {
-        if (player == null || gameSceneController == null || player.CurrentNode == null)
+        if (player == null || gameSceneController == null)
             return;
 
         if (player.CurrentNode == currentNode)
-        {
             gameSceneController.TriggerCrash(player.transform.position, moveDirection);
-        }
     }
 
     private void SnapToCurrentNode()
@@ -169,10 +154,10 @@ public class BusNPC : MonoBehaviour
         if (currentNode == null)
             return;
 
-        transform.position = currentNode.transform.position + (Vector3)worldOffset;
+        transform.position = currentNode.transform.position;
 
-        if (visualSpriteRenderer != null)
-            visualSpriteRenderer.sprite = GetNormalSprite(moveDirection);
+        if (spriteRenderer != null)
+            spriteRenderer.sprite = GetNormalSprite(moveDirection);
     }
 
     private BusTunnelPortal GetPortalByNode(PathNode node)
@@ -203,5 +188,27 @@ public class BusNPC : MonoBehaviour
             case MoveDirection.Right: return rightSprite;
             default: return null;
         }
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (player == null || gameSceneController == null)
+            return;
+
+        if (!other.CompareTag("Player"))
+            return;
+
+        gameSceneController.TriggerCrash(player.transform.position, moveDirection);
+    }
+
+    private void OnTriggerStay2D(Collider2D other)
+    {
+        if (player == null || gameSceneController == null)
+            return;
+
+        if (!other.CompareTag("Player"))
+            return;
+
+        gameSceneController.TriggerCrash(player.transform.position, moveDirection);
     }
 }
